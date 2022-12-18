@@ -82,8 +82,10 @@ function EngineerOrIntern () {
     .then((data) => {
     if (data.nextAction === 'Engineer') {
         addEngineer();
+        return;
     } else if (data.nextAction === 'Intern') {
         addIntern();
+        return;
     } else if (data.nextAction == "Neither, I'm done.") {
       // printHTML();
       console.log("Completed, generating HTML.")}
@@ -114,8 +116,11 @@ function addEngineer () {
         name: 'github',
         message: "What is your engineer's github username?",
       },
-    ]);
-    EngineerOrIntern();
+    ])
+    .then(()=>{
+      EngineerOrIntern();
+    });
+
 }
 
 function addIntern () {
@@ -141,8 +146,10 @@ function addIntern () {
         name: 'school',
         message: "What is your intern's school?",
         },
-    ]);
-    EngineerOrIntern();
+    ])
+    .then(()=>{
+      EngineerOrIntern();
+    });
 }
 
 init();
