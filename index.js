@@ -12,22 +12,27 @@ var manager =
     };
 
 var engineers = [
-    {
-        name: '',
-        employeeID: '',
-        email: '',
-        github: '',
-    }
-];
+    // {
+    //     name: '',
+    //     employeeID: '',
+    //     email: '',
+    //     github: '',
+    // }
+  ] 
+;
 
 var interns = [
-    {
-        name: '',
-        employeeID: '',
-        email: '',
-        school: '',
-    }
+    // {
+    //     name: '',
+    //     employeeID: '',
+    //     email: '',
+    //     school: '',
+    // }
 ];
+
+var engineersContent =  ``;
+var internsContent =  ``;
+
 
 
 console.log('Welcome to the Team Profile Generator!');
@@ -119,7 +124,9 @@ function addEngineer () {
         message: "What is your engineer's github username?",
       },
     ])
-    .then(()=>{
+    .then((data)=>{
+      engineers.push(JSON.stringify(data));
+      console.log(engineers);
       EngineerOrIntern();
     });
 
@@ -150,33 +157,42 @@ function addIntern () {
         },
     ])
     .then(()=>{
+
       EngineerOrIntern();
     });
 }
 
 function generateHTML() {
 
-  fs.writeFile("index.html", employeeProfilePageContent, (err) =>
+  console.log("generating html");
+  console.log(engineers);
+  generateEngineers();
+  console.log(interns);
+  generateInterns();
+
+  fs.writeFile("index.html", employeeProfilePageHeader + engineersContent + internsContent + employeeProfilePageFooter, (err) =>
   err ? console.error(err) : console.log('Success!')
   );
   
 
 }
 
-var employeeProfilePageContent = `
+var employeeProfilePageHeader = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Team Profile Generator</title>
+    <link rel="stylesheet" type="text/css" href="./style.css" />
+
 </head>
 <body>
     <header>
         <h1>Team Profile Generator</h1>
     </header>
     <main>
-        <div class="manager">
+        <div class="manager card">
             <h2>${manager.name}</h2>
             <h3>Manager</h3>
             <p>Employee ID: ${manager.employeeID}</p>
@@ -184,30 +200,42 @@ var employeeProfilePageContent = `
             <p>Office Number: ${manager.officeNumber}</p>
         </div>
         
-        <div class="engineer">`
-        
-        for (var i = 0; i < engineers.length; i++) {
-            employeeProfilePageContent += `
-            <h2>${engineers[i].name}</h2>
-            <h3>Engineer</h3>
-            <p>Employee ID: ${engineers[i].employeeID}</p>
-            <p>Email: ${engineers[i].email}</p>
-            <p>GitHub: ${engineers[i].github}</p>`}
-      `</div>
-      
-      <div class="intern">`
-      
-       for (var i = 0; i < interns.length; i++) {
-        employeeProfilePageContent += `
-        <h2>${interns[i].name}</h2>
-        <h3>Intern</h3>
-        <p>Employee ID: ${interns[i].employeeID}</p>
-        <p>Email: ${interns[i].email}</p>
-        <p>School: ${interns[i].school}</p>`}
-        `</div>
-    </main>
-    </body>
-    </html>`
+        ` 
+
+function generateEngineers() {
+  
+  for (var i = 0; i < engineers.length; i++) {
+        engineersContent += 
+        `<div class="engineer card">
+        <h2>${engineers[i].name}</h2>
+        <h3>Engineer</h3>
+        <p>Employee ID: ${engineers[i].employeeID}</p>
+        <p>Email: ${engineers[i].email}</p>
+        <p>GitHub: ${engineers[i].github}</p>
+        </div>`}
+}
+
+  
+function generateInterns() {
+  internsContent += ``
+
+  for (var i = 0; i < interns.length; i++) {
+    internsContent += 
+    `<div class="intern card">
+    <h2>${interns[i].name}</h2>
+    <h3>Intern</h3>
+    <p>Employee ID: ${interns[i].employeeID}</p>
+    <p>Email: ${interns[i].email}</p>
+    <p>School: ${interns[i].school}</p>
+    </div>`}
+    
+}
+
+var employeeProfilePageFooter = 
+  `</main>
+  </body>
+  </html>
+    `
 
 
 init();
