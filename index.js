@@ -12,24 +12,25 @@ var manager =
     };
 
 var engineers = [
-    // {
-    //     name: '',
-    //     employeeID: '',
-    //     email: '',
-    //     github: '',
-    // }
+    {
+        name: '',
+        employeeID: '',
+        email: '',
+        github: '',
+    }
   ] 
 ;
 
 var interns = [
-    // {
-    //     name: '',
-    //     employeeID: '',
-    //     email: '',
-    //     school: '',
-    // }
+    {
+        name: '',
+        employeeID: '',
+        email: '',
+        school: '',
+    }
 ];
 
+var managerCard = '';
 var engineersContent =  ``;
 var internsContent =  ``;
 
@@ -70,9 +71,20 @@ function init() {
         manager.officeNumber = data.officeNumber;
         console.log("This is the manager: " + manager.name +  "\nEmployee ID: " + manager.employeeID + "\nEmail: " + manager.email + "\nOffice Number: " + manager.officeNumber);
         EngineerOrIntern();
+        generateManagerCard(data);
       });
 }
 
+function generateManagerCard() {
+    managerCard = `
+  <div class="manager card">
+  <h2>${manager.name}</h2>
+  <h3>Manager</h3>
+  <p>Employee ID: ${manager.employeeID}</p>
+  <p>Email: ${manager.email}</p>
+  <p>Office Number: ${manager.officeNumber}</p>
+</div>`
+}
 
 function EngineerOrIntern () {
     inquirer
@@ -125,7 +137,7 @@ function addEngineer () {
       },
     ])
     .then((data)=>{
-      engineers.push(JSON.stringify(data));
+      engineers.push(data);
       console.log(engineers);
       EngineerOrIntern();
     });
@@ -156,8 +168,9 @@ function addIntern () {
         message: "What is your intern's school?",
         },
     ])
-    .then(()=>{
-
+    .then((data)=>{
+      interns.push(data);
+      console.log(interns);
       EngineerOrIntern();
     });
 }
@@ -166,11 +179,13 @@ function generateHTML() {
 
   console.log("generating html");
   console.log(engineers);
-  generateEngineers();
+  console.log(engineers.length);
+  generateEngineers(engineers);
   console.log(interns);
-  generateInterns();
+  console.log(interns.length);
+  generateInterns(interns);
 
-  fs.writeFile("index.html", employeeProfilePageHeader + engineersContent + internsContent + employeeProfilePageFooter, (err) =>
+  fs.writeFile("index.html", employeeProfilePageHeader + managerCard + engineersContent + internsContent + employeeProfilePageFooter, (err) =>
   err ? console.error(err) : console.log('Success!')
   );
   
@@ -184,27 +199,19 @@ var employeeProfilePageHeader = `
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Team Profile Generator</title>
-    <link rel="stylesheet" type="text/css" href="./style.css" />
+    <link rel="stylesheet" type="text/css" href="./dist/style.css" />
 
 </head>
 <body>
     <header>
         <h1>Team Profile Generator</h1>
     </header>
-    <main>
-        <div class="manager card">
-            <h2>${manager.name}</h2>
-            <h3>Manager</h3>
-            <p>Employee ID: ${manager.employeeID}</p>
-            <p>Email: ${manager.email}</p>
-            <p>Office Number: ${manager.officeNumber}</p>
-        </div>
-        
+    <main>    
         ` 
 
 function generateEngineers() {
   
-  for (var i = 0; i < engineers.length; i++) {
+  for (var i = 1; i < engineers.length; i++) {
         engineersContent += 
         `<div class="engineer card">
         <h2>${engineers[i].name}</h2>
@@ -219,7 +226,7 @@ function generateEngineers() {
 function generateInterns() {
   internsContent += ``
 
-  for (var i = 0; i < interns.length; i++) {
+  for (var i = 1; i < interns.length; i++) {
     internsContent += 
     `<div class="intern card">
     <h2>${interns[i].name}</h2>
@@ -228,7 +235,7 @@ function generateInterns() {
     <p>Email: ${interns[i].email}</p>
     <p>School: ${interns[i].school}</p>
     </div>`}
-    
+
 }
 
 var employeeProfilePageFooter = 
