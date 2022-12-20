@@ -1,5 +1,6 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
+
 const { doesNotMatch } = require('assert');
 
 // declare variables
@@ -69,22 +70,14 @@ function init() {
         manager.employeeID = data.employeeID;
         manager.email = data.email;
         manager.officeNumber = data.officeNumber;
-        console.log("This is the manager: " + manager.name +  "\nEmployee ID: " + manager.employeeID + "\nEmail: " + manager.email + "\nOffice Number: " + manager.officeNumber);
-        EngineerOrIntern();
+        // console.log("This is the manager: " + manager.name +  "\nEmployee ID: " + manager.employeeID + "\nEmail: " + manager.email + "\nOffice Number: " + manager.officeNumber);
+
         generateManagerCard(data);
+        EngineerOrIntern();
       });
 }
 
-function generateManagerCard() {
-    managerCard = `
-  <div class="manager card">
-  <h2>${manager.name}</h2>
-  <h3>Manager</h3>
-  <p>Employee ID: ${manager.employeeID}</p>
-  <p>Email: ${manager.email}</p>
-  <p>Office Number: ${manager.officeNumber}</p>
-</div>`
-}
+
 
 function EngineerOrIntern () {
     inquirer
@@ -138,7 +131,7 @@ function addEngineer () {
     ])
     .then((data)=>{
       engineers.push(data);
-      console.log(engineers);
+      // console.log(engineers);
       EngineerOrIntern();
     });
 
@@ -170,19 +163,31 @@ function addIntern () {
     ])
     .then((data)=>{
       interns.push(data);
-      console.log(interns);
+      // console.log(interns);
       EngineerOrIntern();
     });
 }
 
+function generateManagerCard(data) {
+  managerCard = `
+<div class="manager card">
+<h2>${data.name}</h2>
+<h3>Manager</h3>
+<p>Employee ID: ${data.employeeID}</p>
+<p>Email: ${data.email}</p>
+<p>Office Number: ${data.officeNumber}</p>
+</div>`
+}
+
+
 function generateHTML() {
 
   console.log("generating html");
-  console.log(engineers);
-  console.log(engineers.length);
+  // console.log(engineers);
+  // console.log(engineers.length);
   generateEngineers(engineers);
-  console.log(interns);
-  console.log(interns.length);
+  // console.log(interns);
+  // console.log(interns.length);
   generateInterns(interns);
 
   fs.writeFile("index.html", employeeProfilePageHeader + managerCard + engineersContent + internsContent + employeeProfilePageFooter, (err) =>
